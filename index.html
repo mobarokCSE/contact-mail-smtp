@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-validation">
+            <div class="header">
+                <h2 class="header-text">Create Account</h2>
+            </div>
+            <form class="form" id="form" onsubmit="sendEmail(); reset(); return false;" >
+                <div class="form-control">
+                    <level>Username</level><br>
+                    <input type="text" name="" value="" placeholder="Enter Name" id="username" autocomplete="off"
+                        onkeyup="validateName()">
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
+                    <small id=""></small>
+                </div>
+                <div class="form-control">
+                    <level>Email</level><br>
+                    <input type="email" name="" placeholder="Enter Email" id="email" autocomplete="off"
+                        onkeyup="validateEmail()">
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
+                    <small>Error Message</small>
+                </div>
+                <div class="form-control">
+                    <level>Description</level><br>
+                    <textarea name="" id="desc"  placeholder="Type here..." ></textarea>
+                </div>
+                
+                <button type="submit" class="btn">submit</button>
+                
+            </form>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/99c7c9baf3.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+
+    <script>
+        // SEND MAIL
+        function sendEmail(){
+            Email.send({
+            Host : "smtp.gmail.com",
+            Username : "mobarokbd3@gmail.com",
+            Password : "96CE9EA6D88BF24142E9ECEFCA95A843432D",
+            To : 'mubarokbd3@gmail.com',
+            From : document.getElementById("email").value,
+            Subject : "This is the subject",
+            Body : "Name: " + document.getElementById("name").value
+                + "<br> Email: " + document.getElementById("email").value
+                + "<br> Message: " + document.getElementById("desc").value
+
+            }).then(
+            message => alert("message send successfully" )
+            );
+        }
+
+        // more email validation
+        const isEmail = (emailVal) => {
+            var atSymbol = emailVal.indexOf("@");
+            if (atSymbol < 1) return false;
+            var dot = emailVal.lastIndexOf('.');
+            if (dot <= atSymbol + 2) return false;
+            if (dot === emailVal.length - 1) return false;
+            return true;
+        }
+
+
+        // user name validation
+        function validateName() {
+            var username = document.getElementById('username');
+            var usernameVal = username.value.trim();
+
+            // logic
+            if (usernameVal.length === 0) {
+                setErrorMsg(username, 'Username can not blank');
+            } else if (usernameVal <= "3") {
+                setErrorMsg(username, 'Username min 3 character');
+            } else {
+                setSuccessMsg(username);
+            }
+        }
+
+        // email validation
+        function validateEmail() {
+            var email = document.getElementById('email');
+            var emailVal = email.value.trim();
+
+            if (emailVal === "") {
+                setErrorMsg(email, 'email can not blank');
+            } else if (!isEmail(emailVal)) {
+                setErrorMsg(emailVal, 'email not valid');
+            } else {
+                setSuccessMsg(email);
+            }
+        }
+
+
+        function setErrorMsg(input, errormsgs) {
+            const formControl = input.parentElement;
+            const small = formControl.querySelector('small');
+            formControl.className = "form-control error";
+            small.innerText = errormsgs;
+        }
+
+        function setSuccessMsg(input, success) {
+            const formControl = input.parentElement;
+            formControl.className = "form-control success";
+        }
+    </script>
+</body>
+
+</html>
